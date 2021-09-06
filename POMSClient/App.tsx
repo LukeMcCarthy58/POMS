@@ -1,50 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import axios from 'axios';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import {SafeAreaView, StyleSheet} from 'react-native';
+import HomeScreen from './src/screens/HomeScreen';
+import { NativeRouter, Switch, Route } from 'react-router-native';
+import OrdersScreen from './src/screens/OrdersScreen';
+import OrderDetailScreen from './src/screens/OrderDetailScreen';
 
-export default function App() {
-  const [orders, setOrders] = useState([]);
-
-
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/orders').then(response => {
-      console.log(response);
-      setOrders(response.data);
-    })
-  }, [])
-
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text style = {styles.heading}>List of orders</Text>
-        {orders.map((order: any) => (
-          <TouchableOpacity
-              key = {order.orderId}
-              style = {styles.container}
-              >
-              <Text style = {styles.text}>
-                {order.description}
-              </Text>
-          </TouchableOpacity>
-        ))}
-      <StatusBar style="auto" />
-    </View>
+    <NativeRouter>
+      <SafeAreaView style={styles.container}>
+        <Switch>
+          <Route exact path="/" component={HomeScreen} />
+          <Route exact path="/orders" component={OrdersScreen} />
+          <Route exact path={"/orders/:id"} component={OrderDetailScreen} />
+        </Switch>
+      </SafeAreaView>
+    </NativeRouter>
   );
-}
-
+};
 const styles = StyleSheet.create({
   container: {
-    padding: 5,
-    marginTop: 3,
-    
+    flex: 1,
+    backgroundColor: '#e8e7e3',
   },
-  text: {
-    color: '#383838'
-  }, 
-  heading: {
-    fontWeight: 'bold',
-    fontSize: 20
-  }
 });
+export default App;
